@@ -1,10 +1,10 @@
 
 import warnings
-
-from sklearn.calibration import LabelEncoder
 warnings.filterwarnings(action="ignore")
 
 import pandas as pd
+pd.set_option('display.width', 1000)
+pd.set_option('display.max_column', None)
 
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
@@ -24,40 +24,40 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 import time
 
-# ======================================
-# 1. Load Dataset
-# ======================================
 
-data = pd.read_csv("smoking.csv", index_col=False)
+data = pd.read_csv("smoking.csv", index_col = False)
+data['gender'] = data['gender'].apply(lambda x: 1 if x == 'M' else 0)
+data['oral'] = data['oral'].apply(lambda x: 1 if x == 'Y' else 0)
+data['tartar'] = data['tartar'].apply(lambda x: 1 if x == 'Y' else 0)
 
-print("\nSample Data:\n", data.head())
-print("\nShape of dataset:", data.shape)
-print("\nData types:\n", data.dtypes)
-print("\nMissing values:\n", data.isnull().sum())
+# print("\nSample Data:\n", data.head())
+# print("\nShape of dataset:", data.shape)
+# print("\nData types:\n", data.dtypes)
+# print("\nMissing values:\n", data.isnull().sum())
 
-# ======================================
-# 2. Quick Data Understanding
-# ======================================
-print("\nTarget distribution:\n", data['smoking'].value_counts())
+# print("\nData description:\n", data.describe())
 
-plt.figure(figsize=(5,3))
-plt.bar(data['smoking'].value_counts().index, data['smoking'].value_counts().values, color = ['red', 'green'])
-plt.xlabel('smoking')
-plt.ylabel('count')
-plt.title("Target Distribution: Smoking (0=No, 1=Yes)")
-plt.show()
+# print("\nTarget distribution:\n", data['smoking'].value_counts())
 
-# ======================================
-# 3. Preprocessing
-# ======================================
 
-data.set_index('id', inplace=True)
+# plt.hist(data['smoking'])
+# plt.title("Diagnosis: Smoking (0=No, 1=Yes)")
+# #plt.show()
 
-# Encode categorical features if needed
-cat_cols = data.select_dtypes(include=['object']).columns
-for col in cat_cols:
-    le = LabelEncoder()
-    data[col] = le.fit_transform(data[col].astype(str))
+# data = data.set_index('ID')
+# #print("After id", data)
 
-print("\nCategorical features encoded:\n", cat_cols)
+# data.plot(kind = 'density', subplots=True, layout=(5,6), sharex= False, legend = False, fontsize= 1)
+# plt.show()
+
+# fig = plt.figure()
+# ax1 = fig.add_subplot(111)
+# cax = ax1.imshow(data.corr(), interpolation=None)
+# ax1.grid(True)
+# plt.title('Smoking correlation')
+# fig.colorbar(cax, ticks = [.75,.80,.85,.90,.95,1])
+# plt.show()
+
+Y = data['smoking'].values
+X = data.drop(['smoking'], axis=1).values
 
