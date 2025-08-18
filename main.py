@@ -42,12 +42,12 @@ print("\nTarget distribution:\n", data['smoking'].value_counts())
 
 plt.hist(data['smoking'])
 plt.title("Diagnosis: Smoking (0=No, 1=Yes)")
-#plt.show()
+plt.show()
 
 data = data.set_index('ID')
-#print("After id", data)
 
-data.plot(kind = 'density', subplots=True, layout=(5,6), sharex= False, legend = False, fontsize= 1)
+data_num = data.loc[:, data.nunique() > 2]
+data_num.plot(kind='density', subplots=True, layout=(5,7), sharex=False, legend=False, fontsize=1)
 plt.show()
 
 fig = plt.figure()
@@ -112,7 +112,7 @@ plt.show()
 # NB        :   0.703050 (0.005133) (run time: 0.101225)
 # SVM       :   0.729513 (0.008456) (run time: 203.551013)
 
-# SVM has the best performance but takes too long. 
+# SVM has the best performance.
 
 pipelines = []
 pipelines.append(('ScaledCART', Pipeline([ ('Scaler', StandardScaler()),('CART', DecisionTreeClassifier()) ] )))
